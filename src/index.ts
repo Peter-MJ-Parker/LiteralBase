@@ -29,7 +29,7 @@ const client = new Client({
 
 client.config = config;
 client.logs = logs;
-client.commands = new Map<string, any>();
+client.commands = new Map();
 
 EventLoader(client);
 CommandLoader(client);
