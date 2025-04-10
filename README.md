@@ -39,10 +39,6 @@ npm run build
 npm run start
 ```
 
-## Usage
-- Modify the `src` directory to add your custom logic.
-- Refer to the documentation for detailed instructions on extending the bot.
-
 ## Contributing
 Contributions are welcome! Please follow these steps:
 
