@@ -36,7 +36,7 @@ CommandLoader(client);
 RegisterCommands();
 
 client.on('ready', () => {
-  logs.created(`Logged into ${client.user?.tag}`);
+  logs.success(`Logged into ${client.user?.tag}`);
 });
 
 client.login(config.token);

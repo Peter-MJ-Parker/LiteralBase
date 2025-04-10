@@ -1,74 +1,71 @@
-const { inspect } = require('node:util');
+import { inspect } from 'node:util';
 
-const COLOR = {
-	RED: '\x1B[31m',
-	ORANGE: '\x1B[38;5;202m',
-	YELLOW: '\x1B[33m',
-	GREEN: '\x1B[32m',
-	BLUE: '\x1B[34m',
-	PINK: '\x1B[35m',
-	PURPLE: '\x1B[38;5;129m',
-	CYAN: '\x1B[36m',
-	WHITE: '\x1B[37m',
-	RESET: '\x1B[0m'
-}
+const color = {
+  red: '\x1b[31m',
+  orange: '\x1b[38;5;202m',
+  yellow: '\x1b[33m',
+  green: '\x1b[32m',
+  blue: '\x1b[34m',
+  reset: '\x1b[0m',
+};
 
 function getTimestamp() {
-	const date = new Date();
-	const year = date.getFullYear();
-	const month = date.getMonth() + 1;
-	const day = date.getDate();
-	const hours = date.getHours();
-	const minutes = date.getMinutes();
-	const seconds = date.getSeconds();
-	return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-function parse(message: string) {
-	if (typeof message === 'string') return message;
+function write(message = '', prefix = '', colors = true) {
+  const properties = inspect(message, {
+    depth: 3,
+    colors: Boolean(colors && typeof message !== 'string'),
+  });
 
-	const properties = inspect(message, { depth: 3 });
+  const regex = /^\s*["'`](.*)["'`]\s*\+?$/gm;
 
-	const regex = /^\s*["'`](.*)["'`]\s*\+?$/gm;
-
-	const response = [];
-	for (const line of properties.split('\n')) {
-		response.push( line.replace(regex, '$1') );
-	}
-
-	return response.join('\n');
+  const lines = properties.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].replace(regex, '$1');
+    if (i === 0) {
+      console.log(prefix + line);
+    } else {
+      console.log(line);
+    }
+  }
 }
 
 function info(message: string) {
-	console.log(`${COLOR.YELLOW}[${getTimestamp()}]${COLOR.RESET} ${parse(message)}`);
+  return write(message, `${color.yellow}[${getTimestamp()}]${color.reset} `);
 }
 
 function warn(message: string) {
-	console.log(`${COLOR.ORANGE}[${getTimestamp()}]${COLOR.RESET} ${parse(message)}`);
+  return write(message, `${color.orange}[${getTimestamp()}]${color.reset} `);
 }
 
 function error(message: string) {
-	console.log(`${COLOR.RED}[${getTimestamp()}] ${parse(message)}${COLOR.RESET}`);
+  return write(message, `${color.red}[${getTimestamp()}] `, false);
 }
 
 function success(message: string) {
-	console.log(`${COLOR.GREEN}[${getTimestamp()}]${COLOR.RESET} ${parse(message)}`);
+  return write(message, `${color.green}[${getTimestamp()}]${color.reset} `);
 }
 
 function debug(message: string) {
-	console.log(`${COLOR.BLUE}[${getTimestamp()}]${COLOR.RESET} ${parse(message)}`);
+  return write(message, `${color.blue}[${getTimestamp()}]${color.reset} `);
 }
 
-function deleted(message: string) {
-	console.log(`${COLOR.PINK}[${getTimestamp()}]${COLOR.RESET} ${parse(message)}`);
-}
-
-function updated(message: string) {
-	console.log(`${COLOR.PURPLE}[${getTimestamp()}]${COLOR.RESET} ${parse(message)}`);
-}
-
-function created(message: string) {
-	console.log(`${COLOR.CYAN}[${getTimestamp()}]${COLOR.RESET} ${parse(message)}`);
-}
-
-export default { getTimestamp, info, warn, error, success, debug, deleted, updated, created };
+export default {
+  getTimestamp,
+  write,
+  info,
+  warn,
+  error,
+  success,
+  debug,
+  color,
+};
