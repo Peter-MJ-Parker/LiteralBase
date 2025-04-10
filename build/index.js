@@ -6,12 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const fs_1 = __importDefault(require("fs"));
 const requiredFolders = {
-    Buttons: './build/Buttons',
+    // Buttons: './build/Buttons',
     Commands: './build/Commands',
     Events: './build/Events',
-    Menus: './build/Menus',
-    Messages: './build/Messages',
-    Modals: './build/Modals',
+    // Menus: './build/Menus',
+    // Messages: './build/Messages',
+    // Modals: './build/Modals',
 };
 for (const folder of Object.values(requiredFolders)) {
     if (!fs_1.default.existsSync(folder)) {

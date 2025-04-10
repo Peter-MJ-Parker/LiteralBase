@@ -3,12 +3,12 @@ import { Client } from 'discord.js';
 import fs from 'fs';
 
 const requiredFolders = {
-  Buttons: './build/Buttons',
+  // Buttons: './build/Buttons',
   Commands: './build/Commands',
   Events: './build/Events',
-  Menus: './build/Menus',
-  Messages: './build/Messages',
-  Modals: './build/Modals',
+  // Menus: './build/Menus',
+  // Messages: './build/Messages',
+  // Modals: './build/Modals',
 };
 
 for (const folder of Object.values(requiredFolders)) {
