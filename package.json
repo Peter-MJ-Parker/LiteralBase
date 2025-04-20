@@ -1,9 +1,14 @@
 {
   "scripts": {
-    "build": "rd build /s /q && tsc",
+    "build": "if exist build rd build /s /q && tsc",
     "start": "node build/index.js"
   },
   "dependencies": {
-    "discord.js": "^14.18.0"
+    "better-sqlite3": "^11.9.1",
+    "discord.js": "^14.18.0",
+    "mongoose": "^8.13.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13"
   }
 }

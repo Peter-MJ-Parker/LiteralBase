@@ -1,50 +1,50 @@
-# LiteralBase Bot
+# LiteralBase
 
-Welcome to **LiteralBase**, a foundational bot framework designed to streamline the development of custom bots. This repository provides a robust starting point for building bots with modular and extensible features.
+LiteralBase is a Discord bot framework designed for modularity and ease of use. It supports commands, events, components, and database integration.
 
 ## Features
-- **Command & Event Handlers**: Built-in support for commands and events.
-- **Configuration Management**: Simple configuration using config file.
 
-## Getting Started
+- **Command Handling**: Slash commands and prefix-based commands.
+- **Event Handling**: Modular event system for Discord.js events.
+- **Component Handling**: Buttons, menus, and modals.
+- **Database Support**: SQLite and MongoDB integration.
+- **Logging**: Customizable logging system.
+- **Environment Validation**: Ensures required folders and configurations are present.
 
-### Prerequisites
-- [Node.js](https://nodejs.org/) (v16 or higher recommended)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+## Installation
 
-### Installation
-If you want to only use JS, you can delete the src folder and the tsconfig.json file. If you want to use TypeScript, you can keep the src folder and the tsconfig.json file.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-1. Clone the repository:
+2. Configure the bot:
+   - Edit `config.json` with your bot token, client ID, and other settings.
 
-```bash
-git clone https://github.com/literallybase/LiteralBase.git
-cd LiteralBase
-```
-
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-3. Configure the bot:
-
-- Update the configuration values in the `config.json` file.
+3. Build the project:
+   ```bash
+   npm run build
+   ```
 
 4. Start the bot:
+   ```bash
+   npm start
+   ```
 
-```bash
-npm run build
-npm run start
-```
+## Folder Structure
 
-## Contributing
-Contributions are welcome! Please follow these steps:
+- `src/Commands`: Slash commands.
+- `src/Events`: Event handlers.
+- `src/Buttons`: Button components.
+- `src/Menus`: Menu components.
+- `src/Modals`: Modal components.
+- `src/Utilities`: Utility functions and handlers.
 
-1. Fork the repository.
-2. Create a new branch for your feature or bugfix.
-3. Submit a pull request with a detailed description of your changes.
+## Requirements
+
+- Node.js v16.9.0 or higher.
+- TypeScript installed globally (`npm install -g typescript`).
 
 ## License
-This project is licensed under the [MIT License](LICENSE).
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.

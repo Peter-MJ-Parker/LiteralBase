@@ -1,4 +1,4 @@
-import { LiteralClient } from '../types';
+import { LiteralClient, CommandFile } from '../types';
 import ReadFolder from './ReadFolder';
 
 export default function (client: LiteralClient) {
@@ -6,7 +6,7 @@ export default function (client: LiteralClient) {
   const commandFiles = ReadFolder(`${__dirname}/../Commands`);
 
   for (const file of commandFiles) {
-    const command = require(file).default;
+    const command: CommandFile = require(file).default;
     if (!command) {
       client.logs.warn(`The file at ${file} does not export a valid command.`);
       continue;
@@ -19,6 +19,16 @@ export default function (client: LiteralClient) {
 
     if (!command.execute || typeof command.execute !== 'function') {
       client.logs.warn(`Command ${file} has an invalid execute function`);
+      continue;
+    }
+
+    if (command.dev && typeof command.dev !== 'boolean') {
+      client.logs.warn(`Command ${file} has an invalid dev property`);
+      continue;
+    }
+
+    if (command.cooldown && typeof command.cooldown !== 'number') {
+      client.logs.warn(`Command ${file} has an invalid cooldown property`);
       continue;
     }
 

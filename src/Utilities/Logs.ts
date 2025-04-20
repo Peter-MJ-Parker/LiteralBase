@@ -48,7 +48,7 @@ function warn(message: string) {
 }
 
 function error(message: string) {
-  return write(message, `${color.red}[${getTimestamp()}] `, false);
+  return write(message, `${color.red}[${getTimestamp()}]${color.reset} `, false);
 }
 
 function success(message: string) {
@@ -59,6 +59,11 @@ function debug(message: string) {
   return write(message, `${color.blue}[${getTimestamp()}]${color.reset} `);
 }
 
+function db(...args: any[]) {
+  const message = args.join(' ');
+  return write(message, `${color.blue}[${getTimestamp()}]${color.reset} `, false)
+}
+
 export default {
   getTimestamp,
   write,
@@ -67,5 +72,6 @@ export default {
   error,
   success,
   debug,
+  db,
   color,
 };
