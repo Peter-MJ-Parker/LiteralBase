@@ -2,6 +2,7 @@ import fs from 'fs';
 import pathModule from 'path';
 
 export default function (path: string, depth = 2) {
+  path = `${process.cwd()}/build/${path}`;
   const files: string[] = [];
   const stack: { path: string; depth: number }[] = [{ path, depth }];
 

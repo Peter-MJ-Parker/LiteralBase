@@ -1,17 +1,20 @@
 import { Message } from 'discord.js';
 import { LiteralClient } from '../types';
+import { env, logs } from '#utilities';
 
 export default {
   name: 'messageCreate',
   execute: async (client: LiteralClient, message: Message) => {
     if (message.author.bot) return;
-    if (!message.content.startsWith(client.config.prefix)) return;
+    if (!message.content.startsWith(env.prefix)) return;
     const args: string[] = message.content
-      .slice(client.config.prefix.length)
+      .slice(env.prefix.length)
       .trim()
       .split(' ');
 
     const commandName = args.shift()?.toLowerCase();
+
+    if (!commandName) return;
 
     const command = client.messages.get(commandName);
     if (!command) return;
@@ -42,7 +45,7 @@ export default {
     try {
       command.execute(message, client, args);
     } catch (error) {
-      client.logs.error(error as string);
+      logs.error(error as string);
       await message.reply('There was an error while executing this command.');
     }
   },

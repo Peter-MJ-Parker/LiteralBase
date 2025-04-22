@@ -1,31 +1,32 @@
-import { LiteralClient, EventFile } from '../types';
-import ReadFolder from './ReadFolder';
-import { Events } from 'discord.js';
+import { LiteralClient, EventFile } from "../types";
+import { logs, ReadFolder } from "#utilities";
+import { Events } from "discord.js";
 
-export default function (client: LiteralClient) {
+export default async function (client: LiteralClient) {
   let eventCount = 0;
-  const eventFiles = ReadFolder(`${__dirname}/../Events`);
+  const eventFiles = ReadFolder(`Events`);
   for (const file of eventFiles) {
-    const event: EventFile = require(file).default;
+    const ev = await import(file);
+    const event: EventFile = ev.default;
     if (!event) {
-      client.logs.warn(`The file at ${file} does not export a valid event.`);
+      logs.warn(`The file at ${file} does not export a valid event.`);
       continue;
     }
 
-    if (!event.name || typeof event.name !== 'string') {
-      client.logs.warn(`Event ${file} has an invalid name`);
+    if (!event.name || typeof event.name !== "string") {
+      logs.warn(`Event ${file} has an invalid name`);
       continue;
     }
 
     if (!Object.values(Events).includes(event.name as Events)) {
-      client.logs.warn(
+      logs.warn(
         `Event ${file} has an invalid event name: ${event.name}`
       );
       continue;
     }
 
-    if (!event.execute || typeof event.execute !== 'function') {
-      client.logs.warn(`Event ${file} has an invalid execute function`);
+    if (!event.execute || typeof event.execute !== "function") {
+      logs.warn(`Event ${file} has an invalid execute function`);
       continue;
     }
 
@@ -36,5 +37,5 @@ export default function (client: LiteralClient) {
     eventCount++;
   }
 
-  client.logs.info(`Loaded ${eventCount} events`);
+  logs.info(`Loaded ${eventCount} events`);
 }

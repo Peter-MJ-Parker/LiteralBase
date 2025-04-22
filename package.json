@@ -1,14 +1,22 @@
 {
   "scripts": {
-    "build": "if exist build rd build /s /q && tsc",
-    "start": "node build/index.js"
+    "build": "rm -rf ./build && tsc -w",
+    "start": "node build/index.js",
+    "dev": "nodemon build/index.js"
   },
   "dependencies": {
     "better-sqlite3": "^11.9.1",
     "discord.js": "^14.18.0",
+    "glob": "^11.0.1",
     "mongoose": "^8.13.2"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13"
-  }
+  },
+  "imports": {
+    "#utilities": [
+      "./build/Utilities/handlers.js"
+    ]
+  },
+  "type": "module"
 }

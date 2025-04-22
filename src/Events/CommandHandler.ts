@@ -1,3 +1,4 @@
+import { logs } from '#utilities';
 import { LiteralClient } from '../types';
 import { ChatInputCommandInteraction } from 'discord.js';
 
@@ -17,12 +18,12 @@ export default {
       });
     }
 
-    if (!client.cooldowns.has(command.data.name)) {
-      client.cooldowns.set(command.data.name, new Map());
+    if (!client.cooldowns.has(command.name)) {
+      client.cooldowns.set(command.name, new Map());
     }
 
     const now = Date.now();
-    const timestamps = client.cooldowns.get(command.data.name);
+    const timestamps = client.cooldowns.get(command.name);
     const cooldownAmount = (command.cooldown ?? 0) * 1_000;
 
     if (timestamps!.has(interaction.user.id)) {
@@ -33,7 +34,7 @@ export default {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
         await interaction.deferReply({ flags: 64 }).catch(() => {});
         return interaction.editReply(
-          `Please wait, you are on a cooldown for \`${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`
+          `Please wait, you are on a cooldown for \`${command.name}\`. You can use it again <t:${expiredTimestamp}:R>.`
         );
       }
     }
@@ -44,7 +45,7 @@ export default {
     try {
       command.execute(interaction, client);
     } catch (error) {
-      client.logs.error(error as string);
+      logs.error(error as string);
       await interaction.deferReply({ flags: 64 }).catch(() => {});
       await interaction.editReply(
         'There was an error while executing this command.'

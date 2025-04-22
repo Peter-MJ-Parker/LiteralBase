@@ -1,9 +1,9 @@
-import logs from './Logs';
+import { logs } from "#utilities";
 import fs from 'fs';
 import path from 'path';
 
 function LogError(err: Error, type: string) {
-  const logsPath = path.join(__dirname, '..', 'Logs');
+  const logsPath = path.join(process.cwd(), 'Logs');
   if (!fs.existsSync(logsPath)) {
     fs.mkdirSync(logsPath, { recursive: true });
   }

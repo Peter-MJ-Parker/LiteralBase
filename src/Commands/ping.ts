@@ -7,9 +7,13 @@ import {
   ButtonStyle,
 } from 'discord.js';
 import { LiteralClient } from '../types';
+import { createGuildCommand } from '#utilities';
 
-export default {
-  data: new SlashCommandBuilder().setName('ping').setDescription('Pong!'),
+export default createGuildCommand({
+  name: 'ping',
+  description: 'Pong!',
+  aliases: [],
+  cooldown: 5,
   dev: true, // makes it so this command is only registered in the dev guild
   execute: async (
     interaction: ChatInputCommandInteraction,
@@ -27,11 +31,19 @@ export default {
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setCustomId(`button:ping_123`)
+        .setCustomId(`button:ping_${interaction.user.id}_latency`)
         .setLabel('Ping')
-        .setStyle(ButtonStyle.Secondary)
+        .setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder()
+        .setCustomId(`button:ping_${interaction.user.id}_menu`)
+        .setLabel('Activate Menu')
+        .setStyle(ButtonStyle.Primary),
+      new ButtonBuilder()
+        .setCustomId(`button:ping_${interaction.user.id}_modal`)
+        .setLabel('Activate Modal')
+        .setStyle(ButtonStyle.Primary)
     );
 
     await interaction.reply({ embeds: [embed], components: [row] });
   },
-};
+});

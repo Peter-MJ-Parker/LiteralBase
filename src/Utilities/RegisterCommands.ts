@@ -1,36 +1,53 @@
-import { token, clientId, devGuild } from '../../config.json';
-import { REST, Routes } from 'discord.js';
-import ReadFolder from './ReadFolder';
-import logs from './Logs';
-import { CommandFile } from '../types';
-
-const commands: CommandFile[] = [];
-const devCommands: CommandFile[] = [];
-const commandFiles = ReadFolder(`${__dirname}/../Commands`);
-
-for (const file of commandFiles) {
-  const command: CommandFile = require(file).default;
-  if (!command) {
-    logs.warn(`The file at ${file} does not export a valid command.`);
-    continue;
-  }
-
-  if (command['data'] && command['execute'] && !command['dev']) {
-    commands.push(command);
-  } else if (command['data'] && command['execute'] && command['dev']) {
-    devCommands.push(command);
-  } else {
-    logs.warn(
-      `The command at ${file} is missing a required "data" or "execute" property.`
-    );
-  }
-}
-
-const rest = new REST().setToken(token);
+import { REST, Routes } from "discord.js";
+import { env, logs } from "#utilities";
+import ReadFolder from "./ReadFolder.js"; // Adjust path if necessary
+import { CommandFile } from "../types.js";
 
 export default async function () {
+  const commands: CommandFile[] = [];
+  const devCommands: CommandFile[] = [];
+  const commandFiles = ReadFolder(`Commands`);
+
+  for (const file of commandFiles) {
+    const cmd = await import(file);
+    const command: CommandFile = cmd.default;
+    if (!command) {
+      logs.warn(`The file at ${file} does not export a valid command.`);
+      continue;
+    }
+
+    if ("name" in command && "description" in command && "execute" in command) {
+      if (!command["dev"]) {
+        commands.push(command);
+      } else {
+        devCommands.push(command);
+      }
+
+      if (command["aliases"] && Array.isArray(command["aliases"])) {
+        for (const alias of command["aliases"]) {
+          const aliasCommand = {
+            ...command,
+            data: { ...command, name: alias },
+          };
+
+          if (!command["dev"]) {
+            commands.push(aliasCommand);
+          } else {
+            devCommands.push(aliasCommand);
+          }
+        }
+      }
+    } else {
+      logs.warn(
+        `The command at ${file} is missing a required "data" or "execute" property.`
+      );
+    }
+  }
+
+  const rest = new REST().setToken(env.DISCORD_TOKEN);
+
   if (!commands.length && !devCommands.length) {
-    logs.warn('No commands found to register.');
+    logs.warn("No commands found to register.");
     return;
   }
 
@@ -41,13 +58,13 @@ export default async function () {
       } application (/) commands.`
     );
 
-    const data: any = await rest.put(Routes.applicationCommands(clientId), {
-      body: commands.map((cmd) => cmd.data.toJSON()),
+    const data: any = await rest.put(Routes.applicationCommands(env.clientId), {
+      body: commands,
     });
 
     const devData: any = await rest.put(
-      Routes.applicationGuildCommands(clientId, devGuild),
-      { body: devCommands.map((cmd) => cmd.data.toJSON()) }
+      Routes.applicationGuildCommands(env.clientId, env.devGuild),
+      { body: devCommands }
     );
 
     logs.debug(

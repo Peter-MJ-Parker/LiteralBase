@@ -1,40 +1,36 @@
-import { LiteralClient, CommandFile } from '../types';
-import ReadFolder from './ReadFolder';
+import { LiteralClient, CommandFile } from "../types.js";
+import { logs, ReadFolder } from "#utilities";
 
-export default function (client: LiteralClient) {
+export default async function (client: LiteralClient) {
   let commandCount = 0;
-  const commandFiles = ReadFolder(`${__dirname}/../Commands`);
+  const commandFiles = ReadFolder(`Commands`);
 
   for (const file of commandFiles) {
-    const command: CommandFile = require(file).default;
+    const cmd = await import(file);
+    const command: CommandFile = cmd.default;
     if (!command) {
-      client.logs.warn(`The file at ${file} does not export a valid command.`);
+      logs.warn(`The file at ${file} does not export a valid command.`);
       continue;
     }
 
-    if (!command.data || typeof command.data !== 'object') {
-      client.logs.warn(`Command ${file} has an invalid data object`);
+    if (!command.execute || typeof command.execute !== "function") {
+      logs.warn(`Command ${file} has an invalid execute function`);
       continue;
     }
 
-    if (!command.execute || typeof command.execute !== 'function') {
-      client.logs.warn(`Command ${file} has an invalid execute function`);
+    if (command.dev && typeof command.dev !== "boolean") {
+      logs.warn(`Command ${file} has an invalid dev property`);
       continue;
     }
 
-    if (command.dev && typeof command.dev !== 'boolean') {
-      client.logs.warn(`Command ${file} has an invalid dev property`);
+    if (command.cooldown && typeof command.cooldown !== "number") {
+      logs.warn(`Command ${file} has an invalid cooldown property`);
       continue;
     }
 
-    if (command.cooldown && typeof command.cooldown !== 'number') {
-      client.logs.warn(`Command ${file} has an invalid cooldown property`);
-      continue;
-    }
-
-    client.commands.set(command.data.name, command);
+    client.commands.set(command.name, command);
     commandCount++;
   }
 
-  client.logs.info(`Loaded ${commandCount} commands`);
+  logs.info(`Loaded ${commandCount} commands`);
 }

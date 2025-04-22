@@ -1,29 +1,30 @@
-import { LiteralClient, ComponentFile } from '../types';
-import ReadFolder from './ReadFolder';
+import { LiteralClient, ComponentFile } from "../types";
+import { logs, ReadFolder } from "#utilities";
 
-const components: string[] = ['Buttons', 'Menus', 'Modals'];
+const components: string[] = ["Buttons", "Menus", "Modals"];
 
-export default function (client: LiteralClient) {
+export default async function (client: LiteralClient) {
   for (const component of components) {
     let componentCount = 0;
-    const componentFiles = ReadFolder(`${__dirname}/../${component}`);
+    const componentFiles = ReadFolder(`${component}`);
 
     for (const file of componentFiles) {
-      const component: ComponentFile = require(file).default;
+      const comp = await import(file);
+      const component: ComponentFile = comp.default;
       if (!component) {
-        client.logs.warn(
+        logs.warn(
           `The file at ${file} does not export a valid component.`
         );
         continue;
       }
 
-      if (!component.customID || typeof component.customID !== 'string') {
-        client.logs.warn(`Component ${file} has an invalid customID`);
+      if (!component.customID || typeof component.customID !== "string") {
+        logs.warn(`Component ${file} has an invalid customID`);
         continue;
       }
 
-      if (!component.execute || typeof component.execute !== 'function') {
-        client.logs.warn(`Component ${file} has an invalid execute function`);
+      if (!component.execute || typeof component.execute !== "function") {
+        logs.warn(`Component ${file} has an invalid execute function`);
         continue;
       }
 
@@ -31,6 +32,6 @@ export default function (client: LiteralClient) {
       componentCount++;
     }
 
-    client.logs.info(`Loaded ${componentCount} ${component.toLowerCase()}`);
+    logs.info(`Loaded ${componentCount} ${component.toLowerCase()}`);
   }
 }

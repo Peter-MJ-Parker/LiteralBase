@@ -4,6 +4,7 @@ import {
   ModalSubmitInteraction,
 } from 'discord.js';
 import { LiteralClient } from '../types';
+import { logs } from '#utilities';
 
 export default {
   name: 'interactionCreate',
@@ -27,7 +28,7 @@ export default {
     try {
       component.execute(interaction, client, args);
     } catch (error) {
-      client.logs.error(error as string);
+      logs.error(error as string);
       await interaction.deferReply({ flags: 64 });
       await interaction.editReply(
         'There was an error while executing this component.'
