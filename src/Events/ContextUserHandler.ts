@@ -1,18 +1,17 @@
 import { logs } from "#utilities";
-import type { CommandFile, LiteralClient } from "../types";
-import type { ChatInputCommandInteraction } from "discord.js";
+import type { ContextUserFile, LiteralClient } from "../types";
+import type { UserContextMenuCommandInteraction } from "discord.js";
 
 export default {
   name: "interactionCreate",
   execute: async (
     client: LiteralClient,
-    interaction: ChatInputCommandInteraction
+    interaction: UserContextMenuCommandInteraction
   ) => {
-    if (!interaction.isChatInputCommand()) return;
-
-    let command = client.commands.get(
+    if (!interaction.isUserContextMenuCommand()) return;
+    let command = client.contexts.get(
       interaction.commandName
-    ) as CommandFile;
+    ) as ContextUserFile;
 
     if (!command) {
       return await interaction.reply({

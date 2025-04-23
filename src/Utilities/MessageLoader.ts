@@ -28,7 +28,7 @@ export default async function (client: LiteralClient) {
       continue;
     }
 
-    if (message.aliases && typeof message.aliases !== 'object') {
+    if (message.aliases && !Array.isArray(message.aliases)) {
       logs.warn(`Message ${file} has an invalid aliases property`);
       continue;
     }

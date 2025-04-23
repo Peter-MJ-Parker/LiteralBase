@@ -18,18 +18,33 @@ export default async function (client: LiteralClient) {
       continue;
     }
 
-    if (command.dev && typeof command.dev !== "boolean") {
-      logs.warn(`Command ${file} has an invalid dev property`);
+    if (command.cooldown && typeof command.cooldown !== "number") {
+      logs.warn(`Command ${file} has an invalid cooldown property`);
       continue;
     }
 
-    if (command.cooldown && typeof command.cooldown !== "number") {
+    if (command.aliases && !Array.isArray(command.aliases)) {
       logs.warn(`Command ${file} has an invalid cooldown property`);
       continue;
     }
 
     client.commands.set(command.name, command);
     commandCount++;
+
+    for (const alias of command.aliases || []) {
+      if (typeof alias !== 'string') {
+        logs.warn(`Command ${file} has an invalid alias`);
+        continue;
+      }
+
+      if (client.commands.has(alias)) {
+        logs.warn(`Command ${file} has an alias that is already in use`);
+        continue;
+      }
+
+      client.commands.set(alias, command);
+      commandCount++;
+    }
   }
 
   logs.info(`Loaded ${commandCount} commands`);

@@ -9,6 +9,7 @@ export default function (errors: string[] = []) {
     Menus: "./build/Menus",
     Messages: "./build/Messages",
     Modals: "./build/Modals",
+    Contexts: "./build/Contexts"
   };
 
   for (const folder of Object.values(requiredFolders)) {

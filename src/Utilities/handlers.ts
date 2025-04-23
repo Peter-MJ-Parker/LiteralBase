@@ -6,23 +6,17 @@ import EventHandler from "./EventHandler.js";
 import RegisterCommands from "./RegisterCommands.js";
 import ProcessHandler from "./ProcessHandler.js";
 import EnvironmentCheck from "./EnvironmentCheck.js";
+import ContextHandler from "./ContextLoader.js";
 import LiteralClient from "../Lib/LiteralClient.js";
 import { Logs } from "./Logs.js";
 import ReadFolder from "./ReadFolder.js";
-import {
-  CommandFile,
-  ContextType,
-  GlobalSlashCommandData,
-  GuildSlashCommandData,
-  IntegrationType,
-  UserInGuildSlashCommandData,
-  UserSlashCommandData,
-} from "../types.js";
+import { CommandFile, ContextMessageFile, ContextType, ContextUserFile, IntegrationType } from "../types.js";
 
 const logs: Logs = new Logs();
 export {
   CommandLoader,
   ComponentLoader,
+  ContextHandler,
   MessageLoader,
   EventHandler,
   RegisterCommands,
@@ -34,7 +28,7 @@ export {
 };
 export function createGuildCommand(
   commandData: CommandFile
-): GuildSlashCommandData {
+) {
   return {
     ...commandData,
     integration_types: [IntegrationType.GUILD_INSTALL],
@@ -42,9 +36,19 @@ export function createGuildCommand(
   };
 }
 
-export function createUserCommand(
-  commandData: CommandFile
-): UserSlashCommandData {
+export function createCtxMsgCommand(commandData: ContextMessageFile) {
+  return {
+    ...commandData,
+  }
+}
+
+export function createCtxUserCommand(commandData: ContextUserFile) {
+  return {
+    ...commandData
+  }
+}
+
+export function createUserCommand(commandData: CommandFile) {
   return {
     ...commandData,
     integration_types: [IntegrationType.USER_INSTALL],
@@ -52,9 +56,7 @@ export function createUserCommand(
   };
 }
 
-export function createUserInGuildCommand(
-  commandData: CommandFile
-): UserInGuildSlashCommandData {
+export function createUserInGuildCommand(commandData: CommandFile) {
   return {
     ...commandData,
     integration_types: [IntegrationType.USER_INSTALL],
@@ -66,9 +68,7 @@ export function createUserInGuildCommand(
   };
 }
 
-export function createGlobalCommand(
-  commandData: CommandFile
-): GlobalSlashCommandData {
+export function createGlobalCommand(commandData: CommandFile) {
   return {
     ...commandData,
     integration_types: [

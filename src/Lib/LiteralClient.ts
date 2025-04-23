@@ -2,12 +2,15 @@ import { Client } from "discord.js";
 import {
   CommandFile,
   ComponentFile,
+  ContextMessageFile,
+  ContextUserFile,
   LiteralClient as ILiteralClient,
   MessageFile,
 } from "../types.js";
 import {
   CommandLoader,
   ComponentLoader,
+  ContextHandler,
   env,
   EnvironmentCheck,
   EventHandler,
@@ -22,6 +25,7 @@ import Database from "better-sqlite3";
 export default class LiteralClient extends Client implements ILiteralClient {
   config: typeof env;
   commands: Map<string, CommandFile>;
+  contexts: Map<string, ContextMessageFile | ContextUserFile>;
   messages: Map<string, MessageFile>;
   components: Map<string, ComponentFile>;
   cooldowns: Map<string, Map<string, number>>;
@@ -32,6 +36,7 @@ export default class LiteralClient extends Client implements ILiteralClient {
     });
     this.db = undefined;
     this.commands = new Map();
+    this.contexts = new Map();
     this.messages = new Map();
     this.components = new Map();
     this.cooldowns = new Map();
@@ -52,9 +57,10 @@ export default class LiteralClient extends Client implements ILiteralClient {
     EnvironmentCheck();
     await EventHandler(this);
     await CommandLoader(this);
+    await ContextHandler(this);
     await MessageLoader(this);
     await ComponentLoader(this);
-    await RegisterCommands();
+    await RegisterCommands(this);
   }
   private async connectToDatabase() {
     const {mongooseUri, sqlitePath} = this.ENV;

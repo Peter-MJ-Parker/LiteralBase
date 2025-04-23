@@ -75,7 +75,7 @@ export default {
                   .setCustomId(`input1`)
                   .setLabel("What is your username?")
                   .setStyle(TextInputStyle.Short)
-                  .setPlaceholder("Type your username here")
+                  .setPlaceholder("Type your username here " + interaction.user.username)
                   .setMinLength(1)
                   .setMaxLength(100)
                   .setRequired(true),
@@ -87,7 +87,7 @@ export default {
                   .setCustomId(`input2`)
                   .setLabel("What is your user id?")
                   .setStyle(TextInputStyle.Short)
-                  .setPlaceholder("Type your user id here")
+                  .setPlaceholder("Type your user id here " + userId)
                   .setMinLength(1)
                   .setMaxLength(100)
                   .setRequired(true),

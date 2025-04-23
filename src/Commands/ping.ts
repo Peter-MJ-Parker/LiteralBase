@@ -5,6 +5,7 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  ApplicationCommandType,
 } from 'discord.js';
 import { LiteralClient } from '../types';
 import { createGuildCommand } from '#utilities';
@@ -12,9 +13,10 @@ import { createGuildCommand } from '#utilities';
 export default createGuildCommand({
   name: 'ping',
   description: 'Pong!',
-  aliases: [],
+  type: ApplicationCommandType.ChatInput,
+  aliases: ['stats'],
   cooldown: 5,
-  dev: true, // makes it so this command is only registered in the dev guild
+  guild_ids: ['716249660838379541'],
   execute: async (
     interaction: ChatInputCommandInteraction,
     client: LiteralClient
