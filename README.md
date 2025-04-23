@@ -5,6 +5,7 @@ LiteralBase is a Discord bot framework designed for modularity and ease of use. 
 ## Features
 
 - **Command Handling**: Slash commands and prefix-based commands.
+- **Context Menu Command Handling**: Message and User commands.
 - **Event Handling**: Modular event system for Discord.js events.
 - **Component Handling**: Buttons, menus, and modals.
 - **Database Support**: SQLite and MongoDB integration.
@@ -19,7 +20,8 @@ LiteralBase is a Discord bot framework designed for modularity and ease of use. 
    ```
 
 2. Configure the bot:
-   - Edit `config.json` with your bot token, client ID, and other settings.
+   - Rename `.env.ex` to `.env`.
+   - Edit `.env` with your bot token, client ID, and other settings.
 
 3. Build the project:
    ```bash
@@ -28,12 +30,13 @@ LiteralBase is a Discord bot framework designed for modularity and ease of use. 
 
 4. Start the bot:
    ```bash
-   npm start
+   npm run start
    ```
 
 ## Folder Structure
 
 - `src/Commands`: Slash commands.
+- `src/Contexts`: Context Menu Commands.
 - `src/Events`: Event handlers.
 - `src/Buttons`: Button components.
 - `src/Menus`: Menu components.
