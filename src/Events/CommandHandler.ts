@@ -1,23 +1,18 @@
-import { logs } from "#utilities";
-import type { CommandFile, LiteralClient } from "../types";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { logs } from '#utilities';
+import type { LiteralClient } from '../types';
+import type { ChatInputCommandInteraction } from 'discord.js';
 
 export default {
-  name: "interactionCreate",
-  execute: async (
-    client: LiteralClient,
-    interaction: ChatInputCommandInteraction
-  ) => {
+  name: 'interactionCreate',
+  execute: async (client: LiteralClient, interaction: ChatInputCommandInteraction) => {
     if (!interaction.isChatInputCommand()) return;
 
-    let command = client.commands.get(
-      interaction.commandName
-    ) as CommandFile;
+    let command = client.commands.get(interaction.commandName) || client.guildCommands.get(interaction.commandName);
 
     if (!command) {
       return await interaction.reply({
-        content: "This command does not exist.",
-        flags: 64,
+        content: 'This command does not exist.',
+        flags: 64
       });
     }
 
@@ -30,8 +25,7 @@ export default {
     const cooldownAmount = (command.cooldown ?? 0) * 1_000;
 
     if (timestamps!.has(interaction.user.id)) {
-      const expirationTime =
-        timestamps!.get(interaction.user.id)! + cooldownAmount;
+      const expirationTime = timestamps!.get(interaction.user.id)! + cooldownAmount;
 
       if (now < expirationTime) {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
@@ -50,9 +44,7 @@ export default {
     } catch (error) {
       logs.error(error as string);
       await interaction.deferReply({ flags: 64 }).catch(() => {});
-      await interaction.editReply(
-        "There was an error while executing this command."
-      );
+      await interaction.editReply('There was an error while executing this command.');
     }
-  },
+  }
 };

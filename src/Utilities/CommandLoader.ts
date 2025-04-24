@@ -1,5 +1,5 @@
-import { LiteralClient, CommandFile } from "../types.js";
-import { logs, ReadFolder } from "#utilities";
+import { LiteralClient, CommandFile } from '../types.js';
+import { logs, ReadFolder } from '#utilities';
 
 export default async function (client: LiteralClient) {
   let commandCount = 0;
@@ -13,12 +13,17 @@ export default async function (client: LiteralClient) {
       continue;
     }
 
-    if (!command.execute || typeof command.execute !== "function") {
+    if (!command.execute || typeof command.execute !== 'function') {
       logs.warn(`Command ${file} has an invalid execute function`);
       continue;
     }
 
-    if (command.cooldown && typeof command.cooldown !== "number") {
+    if (command.guild_ids && Array.isArray(command.guild_ids)) {
+      client.guildCommands.set(command.name, command);
+      continue;
+    }
+
+    if (command.cooldown && typeof command.cooldown !== 'number') {
       logs.warn(`Command ${file} has an invalid cooldown property`);
       continue;
     }

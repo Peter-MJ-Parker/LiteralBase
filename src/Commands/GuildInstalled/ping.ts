@@ -1,13 +1,12 @@
 import {
-  SlashCommandBuilder,
   ChatInputCommandInteraction,
   EmbedBuilder,
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-  ApplicationCommandType,
+  ApplicationCommandType
 } from 'discord.js';
-import { LiteralClient } from '../types';
+import { LiteralClient } from '../../types';
 import { createGuildCommand } from '#utilities';
 
 export default createGuildCommand({
@@ -17,16 +16,11 @@ export default createGuildCommand({
   aliases: ['stats'],
   cooldown: 5,
   guild_ids: ['716249660838379541'],
-  execute: async (
-    interaction: ChatInputCommandInteraction,
-    client: LiteralClient
-  ) => {
+  execute: async (interaction: ChatInputCommandInteraction, client: LiteralClient) => {
     const embed = new EmbedBuilder()
       .setTitle('Pong! 🏓')
       .setDescription(
-        `**Latency:** \`${client.ws.ping}ms\`\n**Uptime:** <t:${Math.floor(
-          client.uptime! / 1000
-        )}:R>`
+        `**Latency:** \`${client.ws.ping}ms\`\n**Uptime:** <t:${Math.floor((Date.now() - client.uptime!) / 1000)}:R>`
       )
       .setColor(0x2b2d32)
       .setTimestamp();
@@ -47,5 +41,5 @@ export default createGuildCommand({
     );
 
     await interaction.reply({ embeds: [embed], components: [row] });
-  },
+  }
 });
