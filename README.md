@@ -33,8 +33,8 @@ LiteralBase is a Discord bot framework designed for modularity and ease of use. 
 
 4. Change guild ids in Guild Only Commands or delete the commands.
 
-Any commands in the listed folder(s) should be corrected:
-`src/Commands/GuildInstalled/`
+   - Any commands in the listed folder(s) should be corrected:
+     - `src/Commands/GuildInstalled/`
 
 5. Start the bot:
    ```bash
