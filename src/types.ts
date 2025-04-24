@@ -6,7 +6,6 @@ import {
   Message,
   AnySelectMenuInteraction,
   ApplicationCommandOption,
-  ApplicationCommandType,
   MessageContextMenuCommandInteraction,
   UserContextMenuCommandInteraction
 } from 'discord.js';
@@ -56,13 +55,11 @@ export interface CommandFile {
   description: string;
   options?: ApplicationCommandOption[];
   guild_ids?: string[];
-  type?: ApplicationCommandType;
   execute: (interaction: ChatInputCommandInteraction, client: LiteralClient) => void;
 }
 
 export interface ContextMessageFile {
   name: string;
-  type: ApplicationCommandType;
   guild_ids?: string[];
   cooldown?: number;
   integration_types?: IntegrationType[];
@@ -71,7 +68,6 @@ export interface ContextMessageFile {
 }
 export interface ContextUserFile {
   name: string;
-  type: ApplicationCommandType;
   guild_ids?: string[];
   cooldown?: number;
   integration_types?: IntegrationType[];

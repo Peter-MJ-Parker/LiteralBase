@@ -1,18 +1,10 @@
-import {
-  ChatInputCommandInteraction,
-  EmbedBuilder,
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  ApplicationCommandType
-} from 'discord.js';
+import { ChatInputCommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { LiteralClient } from '../../types';
 import { createGuildCommand } from '#utilities';
 
 export default createGuildCommand({
   name: 'ping',
   description: 'Pong!',
-  type: ApplicationCommandType.ChatInput,
   aliases: ['stats'],
   cooldown: 5,
   guild_ids: ['716249660838379541'],
